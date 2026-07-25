@@ -56,10 +56,22 @@ document.addEventListener("click", function (e) {
 });
 
 function abrirModalChamado(id, solicitante, titulo, descricao) {
+  // guarda o id no estado - é isso que vamos usar pra chamar o PHP depois,
+  // não dá pra confiar em extrair do texto "#123" da tela
+  chamadoEstado.idChamado = id;
+  chamadoEstado.aceito = false;
+  chamadoEstado.responsavelId = null;
+
   document.getElementById('chamadoId').innerText = '#' + (id || '');
   document.getElementById('chamadoSolicitante').innerText = solicitante || 'Não informado';
   document.getElementById('chamadoTitulo').innerText = titulo || 'Sem título';
   document.getElementById('chamadoDescricao').innerText = descricao || 'Sem descrição fornecida.';
+
+  // reseta a tela pro estado "aberto" toda vez que abre um chamado diferente
+  document.getElementById('statusBadge').className = 'badge badge-pending';
+  document.getElementById('statusBadge').innerText = 'Em Andamento';
+  document.getElementById('acoesIniciais').classList.remove('hidden');
+  document.getElementById('acoesEmAndamento').classList.add('hidden');
 
   voltarParaDetalhes();
   document.getElementById('modalChamadoOverlay').classList.add('active');
@@ -82,16 +94,45 @@ function voltarParaDetalhes() {
 
 // Ações do chamado
 function aceitarChamado() {
-  chamadoEstado.aceito = true;
-  
-  // Atualiza a interface
-  document.getElementById('statusBadge').className = 'badge badge-progress';
-  document.getElementById('statusBadge').innerText = 'Em Andamento';
-  
-  document.getElementById('acoesIniciais').classList.add('hidden');
-  document.getElementById('acoesEmAndamento').classList.remove('hidden');
+  // não deixa clicar de novo enquanto a requisição não voltar
+  const btnAceitar = document.querySelector('#acoesIniciais .modal-btn-primary');
+  if (btnAceitar) btnAceitar.disabled = true;
 
-  alert('Você aceitou o chamado!');
+  const dados = new FormData();
+  dados.append('id_chamados', chamadoEstado.idChamado);
+
+  fetch('../codigos_php/aceitarChamado.php', {
+    method: 'POST',
+    body: dados
+  })
+    .then(resposta => resposta.json())
+    .then(retorno => {
+      if (retorno.sucesso) {
+        chamadoEstado.aceito = true;
+        chamadoEstado.responsavelId = retorno.id_usuario_responsavel;
+
+        // só atualiza a tela DEPOIS que o backend confirmou
+        document.getElementById('statusBadge').className = 'badge badge-progress';
+        document.getElementById('statusBadge').innerText = 'Em Andamento';
+
+        document.getElementById('acoesIniciais').classList.add('hidden');
+        document.getElementById('acoesEmAndamento').classList.remove('hidden');
+
+        alert(retorno.mensagem);
+      } else {
+        // ex: outro atendente já pegou o chamado antes
+        alert(retorno.mensagem);
+        fecharModalChamado();
+        location.reload(); // recarrega a lista pra refletir o estado real do banco
+      }
+    })
+    .catch(erro => {
+      console.error('Erro ao aceitar chamado:', erro);
+      alert('Erro ao comunicar com o servidor. Tente novamente.');
+    })
+    .finally(() => {
+      if (btnAceitar) btnAceitar.disabled = false;
+    });
 }
 
 function confirmarEncaminhamento() {

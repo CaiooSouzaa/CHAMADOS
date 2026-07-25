@@ -151,7 +151,7 @@ require_once __DIR__ . '/../codigos_php/listarChamados.php';
 
                 <div class="stat-card animate-in delay-2">
                     <div class="stat-header">
-                        <span class="stat-label">Em Aberto</span>
+                        <span class="stat-label">Em Andamento</span>
                         <div class="stat-icon yellow">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2">
                                 <circle cx="12" cy="12" r="10" />
@@ -162,11 +162,8 @@ require_once __DIR__ . '/../codigos_php/listarChamados.php';
                     <div class="stat-value"><?php echo $total_abertos ? $total_abertos : '0' ?></div>
                     <div class="stat-trend neutral">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <circle cx="12" cy="12" r="1" />
-                            <circle cx="19" cy="12" r="1" />
-                            <circle cx="5" cy="12" r="1" />
+                
                         </svg>
-                        Aguardando atendimento
                     </div>
                 </div>
 

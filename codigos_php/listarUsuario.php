@@ -6,7 +6,7 @@ require_once __DIR__ . '/../autenticar/autenticacao.php';
 
 verificarLogin();
 
-$sql_usuarios = "SELECT nome_usuario, email_usuario, papel_usuario, ativo FROM usuario";
+$sql_usuarios = "SELECT id_usuario, nome_usuario, email_usuario, papel_usuario, ativo FROM usuario";
 $resultado_usuarios = conexao($sql_usuarios);
 
 // Query 2: totais

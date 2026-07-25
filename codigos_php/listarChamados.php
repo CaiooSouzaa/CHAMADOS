@@ -26,18 +26,17 @@ try {
 
         $sql_contagem_chamados = "SELECT 
     COUNT(*) AS total_chamados,
-    SUM(CASE WHEN status_chamado = 'aberto' THEN 1 ELSE 0 END) AS total_abertos,
+    SUM(CASE WHEN status_chamado = 'Em Andamento' THEN 1 ELSE 0 END) AS total_abertos,
     SUM(CASE WHEN status_chamado = 'fechado' THEN 1 ELSE 0 END) AS total_fechados
 FROM chamados";
 
         $resultado_contagem = conexao($sql_contagem_chamados);
 
         $totais = $resultado_contagem->fetch_assoc();
-        
+
         $total_chamados = $totais['total_chamados'];
         $total_abertos = $totais['total_abertos'];
         $total_fechados = $totais['total_fechados'];
-
     } else if (ehUsuario()) {
         $sql = "SELECT 
                     c.*, 
