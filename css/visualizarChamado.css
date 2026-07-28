@@ -29,7 +29,7 @@ html, body {
     overflow: hidden;
 }
 
-/* ===== SIDEBAR COMPACTA ===== */
+/* ===== SIDEBAR ===== */
 .sidebar {
     width: var(--sidebar-width);
     background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
@@ -198,7 +198,7 @@ html, body {
 
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.7;transform:scale(1.1)} }
 
-/* ===== CONTENT AREA - SEM SCROLL ===== */
+/* ===== CONTENT AREA ===== */
 .content-area {
     padding: 16px 24px;
     flex: 1;
@@ -493,30 +493,50 @@ html, body {
 
 .btn-danger:hover { background: rgba(239, 68, 68, 0.15); transform: translateY(-1px); }
 
-/* Select no action bar */
+/* ===== SELECT CORRIGIDO ===== */
 .action-select {
     padding: 8px 32px 8px 14px;
     font-size: 0.78rem;
     font-weight: 600;
     font-family: inherit;
-    color: var(--text-primary);
+    color: var(--text-primary) !important;
     background: #f8fafc;
     border: 1.5px solid var(--border-color);
     border-radius: 10px;
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
+    -moz-appearance: none;
     outline: none;
     transition: all 0.2s;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 14px;
+    min-width: 220px;
 }
 
 .action-select:focus {
     border-color: var(--primary);
     box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+/* COR DO TEXTO DAS OPTIONS - ESSENCIAL */
+.action-select option {
+    color: var(--text-primary) !important;
+    background: #ffffff;
+    font-size: 0.85rem;
+    padding: 6px;
+}
+
+.action-select option:disabled {
+    color: #94a3b8 !important;
+}
+
+/* Firefox específico */
+.action-select:-moz-focusring {
+    color: transparent;
+    text-shadow: 0 0 0 var(--text-primary);
 }
 
 /* ===== RESPONSIVO ===== */
