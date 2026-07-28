@@ -17,7 +17,6 @@ $sql = "SELECT
 
 $resultado = conexao($sql);
 ?>
-<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
@@ -140,7 +139,7 @@ $resultado = conexao($sql);
             <div class="view-container" id="container">
                 <div class="view-header" id="header">
                     <div class="view-logo" id="logo">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                             <polyline points="14 2 14 8 20 8" />
                             <line x1="16" y1="13" x2="8" y2="13" />
@@ -150,114 +149,132 @@ $resultado = conexao($sql);
                     <h1 id="title">Visualizar Chamado</h1>
                     <p id="subtitle">Detalhes do chamado selecionado</p>
                 </div>
-
-                <?php foreach ($resultado as $resultados_chamados): ?>
-                    <div class="ticket-card" id="ticket-card">
-                        <div class="ticket-header">
-                            <div>
-                                <div class="ticket-id-badge">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                        <polyline points="14 2 14 8 20 8" />
-                                        <line x1="16" y1="13" x2="8" y2="13" />
-                                        <line x1="16" y1="17" x2="8" y2="17" />
-                                    </svg>
-                                    Chamado #<?php echo htmlspecialchars($resultados_chamados['id_chamados']); ?>
+                <?php foreach ($resultado as $chamado):
+                    if ($chamado): ?>
+                        <div class="ticket-card" id="ticket-card">
+                            <div class="ticket-header">
+                                <div>
+                                    <div class="ticket-id-badge">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                            <polyline points="14 2 14 8 20 8" />
+                                            <line x1="16" y1="13" x2="8" y2="13" />
+                                            <line x1="16" y1="17" x2="8" y2="17" />
+                                        </svg>
+                                        Chamado #<?php echo htmlspecialchars($chamado['id_chamados']); ?>
+                                    </div>
+                                    <h2 class="ticket-title"><?php echo htmlspecialchars($chamado['titulo_chamado']); ?></h2>
                                 </div>
-                                <h2 class="ticket-title">Titulo: <?php echo htmlspecialchars($resultados_chamados['titulo_chamado']); ?></h2>
+                                <span class="status-badge status-aberto">
+                                    <?php echo htmlspecialchars($chamado['status_chamado']); ?>
+                                </span>
+                            </div>
+
+                            <div class="info-grid">
+                                <div class="info-item" id="info-categoria">
+                                    <div class="info-label">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                                        </svg>
+                                        Categoria
+                                    </div>
+                                    <div class="info-value"><?php echo htmlspecialchars($chamado['categoria_chamado']); ?></div>
+                                </div>
+                                <div class="info-item" id="info-status">
+                                    <div class="info-label">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                        </svg>
+                                        Status
+                                    </div>
+                                    <div class="info-value"><?php echo htmlspecialchars($chamado['status_chamado']); ?></div>
+                                </div>
+                                <div class="info-item" id="info-solicitante">
+                                    <div class="info-label">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                            <circle cx="12" cy="7" r="4" />
+                                        </svg>
+                                        Solicitante
+                                    </div>
+                                    <div class="info-value"><?php echo htmlspecialchars($chamado['nome_solicitante']); ?></div>
+                                </div>
+                                <div class="info-item" id="info-responsavel">
+                                    <div class="info-label">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                            <circle cx="9" cy="7" r="4" />
+                                            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                        </svg>
+                                        Responsavel
+                                    </div>
+                                    <div class="info-value <?php echo $chamado['nome_responsavel'] ? '' : 'null'; ?>">
+                                        <?php echo $chamado['nome_responsavel'] ? htmlspecialchars($chamado['nome_responsavel']) : 'Nao atribuido'; ?>
+                                    </div>
+                                </div>
+                                <div class="info-item full-width" id="info-data">
+                                    <div class="info-label">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                            <line x1="16" y1="2" x2="16" y2="6" />
+                                            <line x1="8" y1="2" x2="8" y2="6" />
+                                            <line x1="3" y1="10" x2="21" y2="10" />
+                                        </svg>
+                                        Data de Abertura
+                                    </div>
+                                    <div class="info-value"><?php echo date('d/m/Y H:i', strtotime($chamado['inicio_chamado'])); ?></div>
+                                </div>
+                            </div>
+
+                            <div class="desc-section" id="desc-section">
+                                <div class="desc-header">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="21" y1="10" x2="3" y2="10" />
+                                        <line x1="21" y1="6" x2="3" y2="6" />
+                                        <line x1="21" y1="14" x2="3" y2="14" />
+                                        <line x1="21" y1="18" x2="3" y2="18" />
+                                    </svg>
+                                    <h3>Descricao do Chamado</h3>
+                                </div>
+                                <div class="desc-body">
+                                    <?php echo nl2br(htmlspecialchars($chamado['descricao_chamado'])); ?>
+                                </div>
+                            </div>
+
+
+
+                            <div class="action-bar" id="action-bar">
+                                <button type="button" class="btn btn-primary">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                    </svg>
+                                    Aceitar chamado
+                                </button>
+
+                                <select class="action-select" name="encaminhar" id="encaminhar">
+                                    <option value="" disabled selected>Encaminhar para um colaborador</option>
+                                    <?php foreach ($resultado as $colab): ?>
+                                        <option value="<?php echo $colab['id_usuario']; ?>">
+                                            <?php echo htmlspecialchars($colab['nome_usuario']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+
+                                <a href="listarChamados.php" class="btn btn-secondary">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="15 18 9 12 15 6" />
+                                    </svg>
+                                    Voltar
+                                </a>
                             </div>
                         </div>
-
-                        <div class="info-grid">
-                            <div class="info-item" id="info-categoria">
-                                <div class="info-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-                                    </svg>
-                                    Categoria
-                                </div>
-                                <div class="info-value"><?php echo htmlspecialchars($resultados_chamados['categoria_chamado']); ?></div>
-                            </div>
-                            <div class="info-item" id="info-status">
-                                <div class="info-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                    </svg>
-                                    Status
-                                </div>
-                                <div class="info-value"><?php echo htmlspecialchars($resultados_chamados['status_chamado']); ?></div>
-                            </div>
-                            <div class="info-item" id="info-solicitante">
-                                <div class="info-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                        <circle cx="12" cy="7" r="4" />
-                                    </svg>
-                                    Solicitante
-                                </div>
-                                <div class="info-value"><?php echo htmlspecialchars($resultados_chamados['nome_solicitante']); ?></div>
-                            </div>
-                            <div class="info-item" id="info-responsavel">
-                                <div class="info-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                        <circle cx="9" cy="7" r="4" />
-                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                                    </svg>
-                                    Responsavel
-                                </div>
-                                <div class="info-value <?php echo $resultados_chamados['nome_responsavel'] ? '' : 'null'; ?>">
-                                    <?php echo  $resultados_chamados['nome_responsavel'] ? htmlspecialchars($resultados_chamados['nome_responsavel']) : 'Nao atribuido'; ?>
-                                </div>
-                            </div>
-                            <div class="info-item full-width" id="info-data">
-                                <div class="info-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                        <line x1="16" y1="2" x2="16" y2="6" />
-                                        <line x1="8" y1="2" x2="8" y2="6" />
-                                        <line x1="3" y1="10" x2="21" y2="10" />
-                                    </svg>
-                                    Data de Abertura
-                                </div>
-                                <div class="info-value"><?php echo date('d/m/Y H:i', strtotime($resultados_chamados['inicio_chamado'])); ?></div>
-                            </div>
+                    <?php else: ?>
+                        <div class="ticket-card" id="ticket-card">
+                            <p style="text-align:center;color:var(--text-secondary);font-size:0.9rem;">Chamado nao encontrado.</p>
                         </div>
-
-                        <div class="desc-section" id="desc-section">
-                            <div class="desc-header">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="21" y1="10" x2="3" y2="10" />
-                                    <line x1="21" y1="6" x2="3" y2="6" />
-                                    <line x1="21" y1="14" x2="3" y2="14" />
-                                    <line x1="21" y1="18" x2="3" y2="18" />
-                                </svg>
-                                <h3>Descricao do Chamado</h3>
-                            </div>
-                            <div class="desc-body">
-                                <?php echo nl2br(htmlspecialchars($resultados_chamados['descricao_chamado'])); ?>
-                            </div>
-                        </div>
-
-                        <div class="action-bar" id="action-bar">
-
-                            <a href="#" class="btn btn-primary">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                </svg>
-                                Editar Chamado
-                            </a>
-                            <button type="button" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir este chamado?')">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <polyline points="3 6 5 6 21 6" />
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                </svg>
-                                Excluir
-                            </button>
-                        </div>
-                    </div>
+                    <?php endif; ?>
                 <?php endforeach ?>
             </div>
         </div>
