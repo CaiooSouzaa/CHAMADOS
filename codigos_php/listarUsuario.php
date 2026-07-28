@@ -12,7 +12,7 @@ $resultado_usuarios = conexao($sql_usuarios);
 // Query 2: totais
 $sql_contagem = "SELECT 
                     COUNT(*) AS total_usuarios,
-                    SUM(CASE WHEN papel_usuario = 'Administrador' THEN 1 ELSE 0 END) AS total_admins,
+                    SUM(CASE WHEN papel_usuario = 'Administrador' or papel_usuario = 'admin' THEN 1 ELSE 0 END) AS total_admins,
                     SUM(CASE WHEN ativo = 1 THEN 1 ELSE 0 END) AS total_ativos
                   FROM usuario";
 $resultado_contagem = conexao($sql_contagem);

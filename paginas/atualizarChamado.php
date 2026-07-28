@@ -185,7 +185,51 @@ require_once __DIR__ . '/../codigos_php/editarChamado.php'
                                     placeholder="Ex: Erro ao acessar o sistema de vendas" required maxlength="120">
                             </div>
                         </div>
-
+                        <div class="form-group" id="fg-prioridade"><!-- PROBLEMA AQUI COM O CSS, ELE NÃO APARECE PARA SELECIONAR, PODE ARRUMAR-->
+                            <!-- Prioridade 
+                            <label for="prioridade_chamado">Prioridade</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    </svg>
+                                </span>
+                                <select id="prioridade_chamado" name="prioridade_chamado" required>
+                                    <option value="" disabled selected>Selecione a prioridade</option>
+                                    <option value="Baixa">Baixa</option>
+                                    <option value="Media">Média</option>
+                                    <option value="Alta">Alta</option>
+                                    <option value="Critica">Crítica</option>
+                                </select>
+                                <span class="select-arrow">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </div>
+                            <br>-->
+                            <label for="categoria_chamado">Categoria</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    </svg>
+                                </span>
+                                <select id="prioridade_chamado" name="categoria_chamado" required>
+                                    <option value="" disabled selected>Selecione a prioridade</option>
+                                    <option value="Financeiro">Financeiro</option>
+                                    <option value="Moodle">Moodle</option>
+                                    <option value="Aplicativo ITE">Aplicativo ITE</option>
+                                    <option value="Infraestrutura e TI">Infraestrutura e TI</option>
+                                    <option value="Acadêmico (Secretaria)">Acadêmico (Secretaria)</option>
+                                </select>
+                                <span class="select-arrow">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
                         <!-- Descrição -->
                         <div class="form-group" id="fg-descricao">
                             <label for="descricao_chamado">Descrição</label>
@@ -228,7 +272,7 @@ require_once __DIR__ . '/../codigos_php/editarChamado.php'
                     </form>
                 </div>
 
-                
+
             </div>
         </div>
     </div>

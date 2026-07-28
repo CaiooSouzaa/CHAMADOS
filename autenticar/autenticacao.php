@@ -9,11 +9,15 @@ function estaLogado() {
 }
 
 function ehAdministrador() {
-    return isset($_SESSION['papel_usuario']) && $_SESSION['papel_usuario'] === 'Administrador';
+    return isset($_SESSION['papel_usuario']) && ($_SESSION['papel_usuario'] === 'Administrador' || $_SESSION['papel_usuario'] === 'admin');
 }
 
 function ehUsuario() {
     return isset($_SESSION['papel_usuario']) && $_SESSION['papel_usuario'] === 'usuario';
+}
+
+function ehFuncionario() {
+    return isset($_SESSION['papel_usuario']) && $_SESSION['papel_usuario'] === 'funcionario';
 }
 
 function verificarLogin() {
@@ -25,6 +29,10 @@ function verificarLogin() {
 
 function getUsuarioId() {
     return $_SESSION['id_usuario'] ?? 0;
+}
+
+function getIdChamado(){
+    return $_SESSION['id_chamados'] ?? 0;
 }
 
 function getUsuarioNome() {

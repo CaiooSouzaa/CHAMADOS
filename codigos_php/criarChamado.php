@@ -7,12 +7,14 @@ verificarLogin();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $titulo_chamado = $_POST['titulo_chamado'];
+    $categoria_chamado = $_POST['categoria_chamado'];
     $descricao_chamado = $_POST['descricao_chamado'];
     $usuario = getUsuarioId();
 
     if (!empty($titulo_chamado) && !empty($descricao_chamado) && !empty($usuario)) {
         $sql = "INSERT INTO chamados (
     titulo_chamado,
+    categoria_chamado,
     descricao_chamado,
     status_chamado,
     id_usuario_solicitado,
@@ -21,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     fim_chamado
 ) VALUES (
     '$titulo_chamado',
+    '$categoria_chamado',
     '$descricao_chamado',
     'Aberto',
     '$usuario',

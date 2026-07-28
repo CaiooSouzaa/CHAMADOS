@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../codigos_php/listarChamados.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -124,6 +125,7 @@ require_once __DIR__ . '/../codigos_php/listarChamados.php';
             </div>
         </header>
 
+        
         <!-- CONTENT -->
         <div class="content-area">
             <!-- STATS -->
@@ -162,7 +164,7 @@ require_once __DIR__ . '/../codigos_php/listarChamados.php';
                     <div class="stat-value"><?php echo $total_abertos ? $total_abertos : '0' ?></div>
                     <div class="stat-trend neutral">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                
+
                         </svg>
                     </div>
                 </div>
@@ -233,6 +235,7 @@ require_once __DIR__ . '/../codigos_php/listarChamados.php';
                             <tr>
                                 <th>ID</th>
                                 <th>Título</th>
+                                <th>Categoria</th>
                                 <th>Solicitante</th>
                                 <th>Responsavel</th>
                                 <th>Status</th>
@@ -247,8 +250,9 @@ require_once __DIR__ . '/../codigos_php/listarChamados.php';
                                     <!-- aparece-->
 
 
-                                    <td><span class="ticket-id"><?php echo $chamados['id_chamados'] ?></span></td>
+                                    <td><span class="ticket-id">#<?php echo $chamados['id_chamados'] ?></span></td>
                                     <td><span class="ticket-title"><?php echo $chamados['titulo_chamado'] ?></span></td>
+                                    <td><span class="ticket-title"><?php echo $chamados['categoria_chamado'] ? $chamados['categoria_chamado'] : 'Null' ?></span></td>
                                     <td><span class="ticket-user"><?php echo $chamados['nome_solicitante'] ?></span></td>
                                     <td><span class="ticket-user"><?php echo isset($chamados['nome_responsavel']) ? $chamados['nome_responsavel'] : 'Null'; ?></span></td>
                                     <td><span class="badge badge-aberto"><?php echo $chamados['status_chamado'] ?></span></td>
@@ -257,19 +261,17 @@ require_once __DIR__ . '/../codigos_php/listarChamados.php';
                                     <!-- Ações-->
                                     <td>
                                         <div class="table-actions">
-                                            <button type="button"
-                                                class="action-btn btn-ver-chamado"
-                                                data-id="<?= htmlspecialchars($chamados['id_chamados']) ?>"
-                                                data-solicitante="<?= htmlspecialchars($chamados['nome_solicitante'] ?? '') ?>"
-                                                data-titulo="<?= htmlspecialchars($chamados['titulo_chamado'] ?? '') ?>"
-                                                data-descricao="<?= htmlspecialchars($chamados['descricao_chamado'] ?? 'Sem descrição') ?>"
-                                                title="Visualizar">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                    <circle cx="12" cy="12" r="3" />
-                                                </svg>
-                                            </button>
-                                            <a href="../paginas/atualizarChamado.php?id_chamado=<?php echo $chamados['id_chamados'] ?>">
+                                            <a href="../paginas/visualizarChamado.php?id_chamado=<?php echo $chamados['id_chamados']?>">
+                                                <button type="button"
+                                                    class="action-btn btn-ver-chamado"
+                                                    title="Visualizar">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                        <circle cx="12" cy="12" r="3" />
+                                                    </svg>
+                                                </button>
+                                            </a>
+                                            <a href="../paginas/atualizarChamado.php?id_chamados=<?php echo $chamados['id_chamados'] ?>">
                                                 <button class="action-btn edit" title="Editar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                                                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
@@ -328,58 +330,8 @@ require_once __DIR__ . '/../codigos_php/listarChamados.php';
             </div>
         </div>
 
-       <!-- Modal de Gestão de Chamado -->
-<div class="modal-overlay" id="modalChamadoOverlay">
-    <div class="modal modal-lg">
-        
-        <!-- Cabeçalho Fixo no Topo -->
-        <div class="modal-header">
-            <span class="badge badge-pending" id="statusBadge">Em Aberto</span>
-            <button type="button" class="btn-close" onclick="fecharModalChamado()">&times;</button>
-        </div>
+        <!-- Modal de Gestão de Chamado -->
 
-        <!-- TELA 1: Detalhes do Chamado (Conteúdo com Scroll) -->
-        <div class="modal-step active" id="stepDetalhes">
-            <h3 class="modal-title">Detalhes do Chamado <span class="chamado-id" id="chamadoId">#1042</span></h3>
-
-            <div class="chamado-info-grid">
-                <div class="info-group">
-                    <label>Solicitante</label>
-                    <p id="chamadoSolicitante">Ana Silva</p>
-                </div>
-
-                <div class="info-group">
-                    <label>Título</label>
-                    <p id="chamadoTitulo">Erro ao exportar relatório</p>
-                </div>
-
-                <div class="info-group full-width">
-                    <label>Descrição</label>
-                    <div class="description-box" id="chamadoDescricao">
-                        <!-- O texto longo entra aqui -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Botões no final do scroll -->
-            <div class="modal-actions" id="acoesIniciais">
-                <button type="button" class="modal-btn modal-btn-secondary" onclick="irParaEncaminhar()">Encaminhar para Responsável</button>
-                <button type="button" class="modal-btn modal-btn-primary" onclick="aceitarChamado()">Aceitar Chamado</button>
-            </div>
-
-            <div class="modal-actions hidden" id="acoesEmAndamento">
-                <button type="button" class="modal-btn modal-btn-secondary" onclick="irParaEncaminhar()">Reencaminhar Funcionário</button>
-                <button type="button" class="modal-btn modal-btn-success" onclick="finalizarChamado()">Finalizar Chamado</button>
-            </div>
-        </div>
-
-        <!-- TELA 2: Encaminhar para Responsável -->
-        <div class="modal-step" id="stepEncaminhar">
-            <!-- Conteúdo da tela 2 -->
-        </div>
-
-    </div>
-</div>
 
     </div>
 

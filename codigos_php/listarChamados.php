@@ -3,15 +3,12 @@
 require_once __DIR__ .  '/../codigos_php/conexao.php';
 require_once __DIR__ . '/../autenticar/autenticacao.php';
 
-
 verificarLogin();
-
 $resultado = [];
 
 try {
 
     $id_logado = getUsuarioId();
-
 
     if (ehAdministrador()) {
         $sql = "SELECT 
@@ -45,7 +42,7 @@ FROM chamados";
                 FROM chamados c
                 LEFT JOIN usuario u ON c.id_usuario_solicitado = u.id_usuario
                 LEFT JOIN usuario u2 ON c.id_usuario_responsavel = u2.id_usuario
-                WHERE c.id_usuario_solicitado = $id_logado
+                WHERE c.id_usuario_solicitado = $id_logado '
                 ORDER BY c.inicio_chamado DESC";
 
         $resultado = conexao($sql);
