@@ -56,4 +56,6 @@ function getUsuarioNome() {
 function getUsuarioPapel() {
     return $_SESSION['papel_usuario'] ?? 'usuario';
 }
+
+
 ?>

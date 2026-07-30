@@ -1,6 +1,12 @@
 <?php
 session_start();
 require_once __DIR__ . '/../codigos_php/listarChamados.php';
+if (verificarLogin()) {
+    if (!ehAdministrador()) {
+         header('Location: ../paginas/index.php');
+         exit;
+    } 
+}
 
 ?>
 
@@ -125,7 +131,7 @@ require_once __DIR__ . '/../codigos_php/listarChamados.php';
             </div>
         </header>
 
-        
+
         <!-- CONTENT -->
         <div class="content-area">
             <!-- STATS -->
@@ -261,7 +267,7 @@ require_once __DIR__ . '/../codigos_php/listarChamados.php';
                                     <!-- Ações-->
                                     <td>
                                         <div class="table-actions">
-                                            <a href="../paginas/visualizarChamado.php?id_chamado=<?php echo $chamados['id_chamados']?>">
+                                            <a href="../paginas/visualizarChamado.php?id_chamado=<?php echo $chamados['id_chamados'] ?>">
                                                 <button type="button"
                                                     class="action-btn btn-ver-chamado"
                                                     title="Visualizar">

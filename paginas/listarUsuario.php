@@ -2,6 +2,14 @@
 session_start();
 
 require_once __DIR__ . '/../codigos_php/listarUsuario.php';
+if (!ehAdministrador()) {
+    header('Location: ../paginas/paginaInicial_usuario.php');
+    exit;
+}
+
+
+exit;
+
 ?>
 
 <!DOCTYPE html>
@@ -221,7 +229,7 @@ require_once __DIR__ . '/../codigos_php/listarUsuario.php';
                                     </td>
                                     <td>
                                         <div class="table-actions" style="justify-content: flex-end;">
-                                            <a href="../paginas/editarPerfil.php?id_usuario=<?php echo $usuarios['id_usuario']?>">
+                                            <a href="../paginas/editarPerfil.php?id_usuario=<?php echo $usuarios['id_usuario'] ?>">
                                                 <button class="action-btn edit" title="Editar">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -229,15 +237,15 @@ require_once __DIR__ . '/../codigos_php/listarUsuario.php';
                                                     </svg>
                                                 </button>
                                             </a>
-                                            
+
                                             <form action="../codigos_php/excluirPerfilUsuario.php" method="post">
                                                 <input type="hidden" name="id_usuario" value="<?= $usuarios['id_usuario'] ?>">
-                                            <button class="action-btn delete" title="Excluir">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                    <polyline points="3 6 5 6 21 6" />
-                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                                </svg>
-                                            </button>
+                                                <button class="action-btn delete" title="Excluir">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <polyline points="3 6 5 6 21 6" />
+                                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                                    </svg>
+                                                </button>
                                             </form>
                                         </div>
                                     </td>

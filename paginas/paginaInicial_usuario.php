@@ -1,7 +1,12 @@
 <?php
 session_start();
 require_once __DIR__ . '/../codigos_php/listarChamados.php';
-
+if (verificarLogin()) {
+    if (!ehUsuario()) {
+         header('Location: ../paginas/index.php');
+         exit;
+    } 
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,6 +56,8 @@ require_once __DIR__ . '/../codigos_php/listarChamados.php';
                     Novo Chamado
                 </a>
             </div>
+
+         
         </nav>
 
         <div class="sidebar-footer">
