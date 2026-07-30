@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/../autenticar/autenticacao.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
@@ -25,15 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['nome_usuario'] = $usuario['nome_usuario'];
                 $_SESSION['papel_usuario'] = $usuario['papel_usuario'];
 
-                if ($_SESSION['papel_usuario'] == 'Administrador') {
+                $papel = strtolower(trim((string)($_SESSION['papel_usuario'] ?? '')));
+                $papel = str_replace(['á', 'à', 'â', 'ã', 'ä'], 'a', $papel);
+                $papel = str_replace(['é', 'è', 'ê', 'ë'], 'e', $papel);
+                $papel = str_replace(['í', 'ì', 'î', 'ï'], 'i', $papel);
+                $papel = str_replace(['ó', 'ò', 'ô', 'õ', 'ö'], 'o', $papel);
+                $papel = str_replace(['ú', 'ù', 'û', 'ü'], 'u', $papel);
+                $papel = str_replace(['ç'], 'c', $papel);
+
+                if ($papel === 'administrador' || $papel === 'admin' || $papel === 'adm') {
                     header("Location: ../paginas/paginaInicial_administrador.php");
-                }
-
-                if ($_SESSION['papel_usuario'] == 'usuario') {
-                    header("Location: ../paginas/paginaInicial_usuario.php");
-                }
-
-                if ($_SESSION['papel_usuario'] == 'funcionario') {
+                } else {
                     header("Location: ../paginas/paginaInicial_usuario.php");
                 }
                 exit;

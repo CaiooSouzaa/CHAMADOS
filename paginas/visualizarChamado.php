@@ -4,7 +4,21 @@ require_once __DIR__ . '/../codigos_php/listarChamados.php';
 
 $id = isset($_GET['id_chamado']) ? intval($_GET['id_chamado']) : 0;
 
-// Dados do chamado
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'encaminhar') {
+    $id_chamado_post = intval($_POST['id_chamado'] ?? 0);
+    $id_colaborador = intval($_POST['id_colaborador'] ?? 0);
+
+    if ($id_chamado_post > 0 && $id_colaborador > 0) {
+        $sql_encaminhar = "UPDATE chamados 
+            SET id_usuario_responsavel = $id_colaborador, status_chamado = 'Em andamento' 
+            WHERE id_chamados = $id_chamado_post";
+        conexao($sql_encaminhar);
+    }
+
+    header("Location: visualizarChamado.php?id_chamado=" . $id_chamado_post);
+    exit;
+}
+
 $sql_chamado = "SELECT 
     c.*, 
     u.nome_usuario AS nome_solicitante,
@@ -16,15 +30,27 @@ WHERE c.id_chamados = $id
 LIMIT 1";
 
 $resultado_chamado = conexao($sql_chamado);
-$chamado = !empty($resultado_chamado) ? $resultado_chamado : null;
+$chamados = !empty($resultado_chamado) ? $resultado_chamado : null;
 
-// Colaboradores separados (técnicos e admins ativos)
 $sql_colabs = "SELECT id_usuario, nome_usuario FROM usuario 
-               WHERE papel_usuario IN ('tecnico', 'admin') 
-               AND status_usuario = 'ativo' 
+               WHERE papel_usuario IN ('tecnico', 'admin', 'usuario', 'Administrador') 
+               AND ativo = 1 
                ORDER BY nome_usuario";
 
 $colaboradores = conexao($sql_colabs);
+
+function classeStatus($status) {
+    $normalizado = strtolower(trim($status));
+    $mapa = [
+        'aberto'        => 'status-aberto',
+        'em andamento'  => 'status-andamento',
+        'andamento'     => 'status-andamento',
+        'fechado'       => 'status-fechado',
+        'concluido'     => 'status-fechado',
+        'concluído'     => 'status-fechado',
+    ];
+    return $mapa[$normalizado] ?? 'status-aberto';
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -53,13 +79,23 @@ $colaboradores = conexao($sql_colabs);
     <nav class="sidebar-nav">
         <div class="nav-section">
             <div class="nav-section-title">Chamados</div>
-            <a href="../paginas/paginaInicial_administrador.php" class="nav-item">
+            <?php if(ehUsuario()): ?>
+            <a href="../paginas/paginaInicial_usuario.php" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                     <polyline points="9 22 9 12 15 12 15 22" />
                 </svg>
                 Dashboard
             </a>
+            <?php else: ?>
+                <a href="../paginas/paginaInicial_administrador.php" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                Dashboard
+            </a>
+            <?php endif; ?>
             <a href="../paginas/chamados.php" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="12" y1="5" x2="12" y2="19" />
@@ -145,8 +181,8 @@ $colaboradores = conexao($sql_colabs);
 
     <div class="content-area">
         <div class="view-container" id="container">
-            <div class="view-header" id="header">
-                <div class="view-logo" id="logo">
+            <div class="view-header">
+                <div class="view-logo">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                         <polyline points="14 2 14 8 20 8" />
@@ -154,50 +190,49 @@ $colaboradores = conexao($sql_colabs);
                         <line x1="16" y1="17" x2="8" y2="17" />
                     </svg>
                 </div>
-                <h1 id="title">Visualizar Chamado</h1>
-                <p id="subtitle">Detalhes do chamado selecionado</p>
+                <h1>Visualizar Chamado</h1>
+                <p>Detalhes do chamado selecionado</p>
             </div>
 
-            <?php if ($chamado): ?>
-            <div class="ticket-card" id="ticket-card">
+            <?php if (!empty($resultado_chamado)): ?>
+                <?php foreach ($resultado_chamado as $chamados): ?>
+            <div class="ticket-card">
                 <div class="ticket-header">
-                    <div>
-                        <div class="ticket-id-badge">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                <polyline points="14 2 14 8 20 8" />
-                                <line x1="16" y1="13" x2="8" y2="13" />
-                                <line x1="16" y1="17" x2="8" y2="17" />
-                            </svg>
-                            Chamado #<?php echo htmlspecialchars($chamado['id_chamados']); ?>
-                        </div>
-                        <h2 class="ticket-title"><?php echo htmlspecialchars($chamado['titulo_chamado']); ?></h2>
+                    <div class="ticket-id-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                        </svg>
+                        Chamado #<?php echo htmlspecialchars($chamados['id_chamados']); ?>
                     </div>
-                    <span class="status-badge status-aberto">
-                        <?php echo htmlspecialchars($chamado['status_chamado']); ?>
+                    <h2 class="ticket-title"><?php echo htmlspecialchars($chamados['titulo_chamado']); ?></h2>
+                    <span class="status-badge <?php echo classeStatus($chamados['status_chamado']); ?>">
+                        <?php echo htmlspecialchars($chamados['status_chamado']); ?>
                     </span>
                 </div>
 
                 <div class="info-grid">
-                    <div class="info-item" id="info-categoria">
+                    <div class="info-item">
                         <div class="info-label">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
                             </svg>
                             Categoria
                         </div>
-                        <div class="info-value"><?php echo htmlspecialchars($chamado['categoria_chamado']); ?></div>
+                        <div class="info-value"><?php echo htmlspecialchars($chamados['categoria_chamado']); ?></div>
                     </div>
-                    <div class="info-item" id="info-status">
+                    <div class="info-item">
                         <div class="info-label">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                             </svg>
                             Status
                         </div>
-                        <div class="info-value"><?php echo htmlspecialchars($chamado['status_chamado']); ?></div>
+                        <div class="info-value"><?php echo htmlspecialchars($chamados['status_chamado']); ?></div>
                     </div>
-                    <div class="info-item" id="info-solicitante">
+                    <div class="info-item">
                         <div class="info-label">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -205,9 +240,9 @@ $colaboradores = conexao($sql_colabs);
                             </svg>
                             Solicitante
                         </div>
-                        <div class="info-value"><?php echo htmlspecialchars($chamado['nome_solicitante']); ?></div>
+                        <div class="info-value"><?php echo htmlspecialchars($chamados['nome_solicitante']); ?></div>
                     </div>
-                    <div class="info-item" id="info-responsavel">
+                    <div class="info-item">
                         <div class="info-label">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
@@ -217,11 +252,11 @@ $colaboradores = conexao($sql_colabs);
                             </svg>
                             Responsavel
                         </div>
-                        <div class="info-value <?php echo $chamado['nome_responsavel'] ? '' : 'null'; ?>">
-                            <?php echo $chamado['nome_responsavel'] ? htmlspecialchars($chamado['nome_responsavel']) : 'Nao atribuido'; ?>
+                        <div class="info-value <?php echo $chamados['nome_responsavel'] ? '' : 'null'; ?>">
+                            <?php echo $chamados['nome_responsavel'] ? htmlspecialchars($chamados['nome_responsavel']) : 'Nao atribuido'; ?>
                         </div>
                     </div>
-                    <div class="info-item full-width" id="info-data">
+                    <div class="info-item full-width">
                         <div class="info-label">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
@@ -231,11 +266,11 @@ $colaboradores = conexao($sql_colabs);
                             </svg>
                             Data de Abertura
                         </div>
-                        <div class="info-value"><?php echo date('d/m/Y H:i', strtotime($chamado['inicio_chamado'])); ?></div>
+                        <div class="info-value"><?php echo date('d/m/Y H:i', strtotime($chamados['inicio_chamado'])); ?></div>
                     </div>
                 </div>
 
-                <div class="desc-section" id="desc-section">
+                <div class="desc-section">
                     <div class="desc-header">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="21" y1="10" x2="3" y2="10" />
@@ -246,11 +281,11 @@ $colaboradores = conexao($sql_colabs);
                         <h3>Descricao do Chamado</h3>
                     </div>
                     <div class="desc-body">
-                        <?php echo nl2br(htmlspecialchars($chamado['descricao_chamado'])); ?>
+                        <?php echo nl2br(htmlspecialchars($chamados['descricao_chamado'])); ?>
                     </div>
                 </div>
 
-                <div class="action-bar" id="action-bar">
+                <div class="action-bar">
                     <button type="button" class="btn btn-primary">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -259,18 +294,31 @@ $colaboradores = conexao($sql_colabs);
                         Aceitar chamado
                     </button>
 
-                    <select class="action-select" name="encaminhar" id="encaminhar">
-                        <option value="" disabled selected>Encaminhar para um colaborador</option>
-                        <?php if (!empty($colaboradores)): ?>
-                            <?php foreach ($colaboradores as $colab): ?>
-                                <option value="<?php echo htmlspecialchars($colab['id_usuario']); ?>">
-                                    <?php echo htmlspecialchars($colab['nome_usuario']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <option value="" disabled>Nenhum colaborador disponivel</option>
-                        <?php endif; ?>
-                    </select>
+                    <form class="encaminhar-form" method="POST" action="visualizarChamado.php">
+                        <input type="hidden" name="acao" value="encaminhar">
+                        <input type="hidden" name="id_chamado" value="<?php echo (int) $id; ?>">
+
+                        <select class="action-select" name="id_colaborador" id="encaminhar">
+                            <option value="" disabled selected>Encaminhar para um colaborador</option>
+                            <?php if (!empty($colaboradores)): ?>
+                                <?php foreach ($colaboradores as $colab): ?>
+                                    <option value="<?php echo htmlspecialchars($colab['id_usuario']); ?>">
+                                        <?php echo htmlspecialchars($colab['nome_usuario']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <option value="" disabled>Nenhum colaborador disponivel</option>
+                            <?php endif; ?>
+                        </select>
+
+                        <button type="submit" class="btn btn-primary" id="btn-encaminhar" disabled>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="22" y1="2" x2="11" y2="13" />
+                                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                            </svg>
+                            Encaminhar
+                        </button>
+                    </form>
 
                     <a href="listarChamados.php" class="btn btn-secondary">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -280,8 +328,9 @@ $colaboradores = conexao($sql_colabs);
                     </a>
                 </div>
             </div>
+                <?php endforeach; ?>
             <?php else: ?>
-            <div class="ticket-card" id="ticket-card">
+            <div class="ticket-card">
                 <p style="text-align:center;color:var(--text-secondary);font-size:0.9rem;">Chamado nao encontrado.</p>
             </div>
             <?php endif; ?>

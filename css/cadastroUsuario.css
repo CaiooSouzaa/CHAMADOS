@@ -30,6 +30,7 @@
             color: var(--text-primary);
             display: flex;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* ===== SIDEBAR ===== */
@@ -316,16 +317,18 @@
         }
 
         .content-area {
-            padding: 32px;
+            padding: clamp(20px, 2.6vw, 32px);
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: flex-start;
+            width: 100%;
+            max-width: 100%;
         }
 
         /* ===== FORM CONTAINER ===== */
         .form-container {
-            width: 100%;
+            width: min(100%, 520px);
             max-width: 520px;
             opacity: 0;
             transform: translateY(30px) scale(0.97);
