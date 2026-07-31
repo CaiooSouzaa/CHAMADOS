@@ -16,6 +16,80 @@ require_once __DIR__ . '/../codigos_php/editarPerfilUsuario.php';
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../css/editarPerfil.css">
+
+    <!-- CSS adicional para selects e novo campo de status -->
+    <style>
+        /* ===== FORÇAR VISIBILIDADE DOS NOVOS CAMPOS ===== */
+        #fg-papel,
+        #fg-ativo {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+            display: block !important;
+        }
+
+        /* ===== ESTILIZAÇÃO DOS SELECTS ===== */
+        select {
+            width: 100%;
+            padding: 10px 14px 10px 40px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            border: 1.5px solid var(--border-color, #e2e8f0);
+            border-radius: 8px;
+            outline: none;
+            background: #fafafa;
+            color: var(--text-primary, #0f172a);
+            transition: all 0.2s;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        select:focus {
+            border-color: var(--primary, #2563eb);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        select:disabled {
+            background: #f1f5f9;
+            color: var(--text-secondary, #64748b);
+            cursor: not-allowed;
+        }
+
+        /* Estilização das options */
+        select option {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            background: #ffffff;
+            color: var(--text-primary, #0f172a);
+        }
+
+        /* Wrapper do select com ícone e seta */
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper .input-icon {
+            position: absolute;
+            left: 12px;
+            color: var(--text-secondary, #64748b);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .input-wrapper .select-arrow {
+            position: absolute;
+            right: 12px;
+            color: var(--text-secondary, #64748b);
+            pointer-events: none;
+            z-index: 2;
+        }
+    </style>
 </head>
 
 <body>
@@ -184,12 +258,59 @@ require_once __DIR__ . '/../codigos_php/editarPerfilUsuario.php';
                             </div>
                         </div>
 
+                        <!-- Nível de Acesso -->
+                        <div class="form-group" id="fg-papel">
+                            <label for="papel_usuario">Nível de Acesso</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    </svg>
+                                </span>
+                                <select id="papel_usuario" name="papel_usuario" required>
+                                    <option value="" disabled>Selecione o nível de acesso</option>
+                                    <option value="Administrador" <?php echo (isset($papel_usuario) && $papel_usuario === 'Administrador') ? 'selected' : ''; ?>>Administrador</option>
+                                    <option value="usuario" <?php echo (isset($papel_usuario) && $papel_usuario === 'usuario') ? 'selected' : ''; ?>>Usuário</option>
+                                    <option value="funcionario" <?php echo (isset($papel_usuario) && $papel_usuario === 'funcionario') ? 'selected' : ''; ?>>Funcionário</option>
+                                </select>
+                                <span class="select-arrow">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Status da Conta (NOVO CAMPO) -->
+                        <div class="form-group" id="fg-ativo">
+                            <label for="ativo">Status da Conta</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                        <polyline points="22 4 12 14.01 9 11.01" />
+                                    </svg>
+                                </span>
+                                <select id="ativo" name="ativo" required>
+                                    <option value="" disabled>Selecione o status</option>
+                                    <option value="1" <?php echo (isset($ativo_usuario) && $ativo_usuario == '1') ? 'selected' : ''; ?>>
+                                        Ativo
+                                    </option>
+                                    <option value="0" <?php echo (isset($ativo_usuario) && $ativo_usuario == '0') ? 'selected' : ''; ?>>
+                                        Inativo
+                                    </option>
+                                </select>
+                                <span class="select-arrow">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+
                         <div class="form-divider" id="divider">
                             <span>Alterar Senha</span>
                         </div>
-
-                        <!-- Senha Atual -->
-
 
                         <!-- Nova Senha -->
                         <div class="form-group" id="fg-senha-nova">
@@ -238,28 +359,6 @@ require_once __DIR__ . '/../codigos_php/editarPerfilUsuario.php';
                                 </button>
                             </div>
                         </div>
-                        <div class="form-group" id="fg-papel">
-                            <label for="papel_usuario">Nível de Acesso</label>
-                            <div class="input-wrapper">
-                                <span class="input-icon">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                    </svg>
-                                </span>
-                                <select id="papel_usuario" name="papel_usuario" required>
-                                    <option value="" disabled>Selecione o nível de acesso</option>
-                                    <option value="Administrador" <?php echo (isset($papel_usuario) && $papel_usuario === 'Administrador') ? 'selected' : ''; ?>>Administrador</option>
-                                    <option value="usuario" <?php echo (isset($papel_usuario) && $papel_usuario === 'usuario') ? 'selected' : ''; ?>>Usuário</option>
-                                    <option value="funcionario" <?php echo (isset($papel_usuario) && $papel_usuario === 'funcionario') ? 'selected' : ''; ?>>Funcionário</option>
-                                </select>
-                                <span class="select-arrow">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="6 9 12 15 18 9" />
-                                    </svg>
-                                </span>
-                            </div>
-                        </div>
-
 
                         <!-- Botão -->
                         <button type="submit" class="btn-submit" id="btn">
@@ -289,8 +388,24 @@ require_once __DIR__ . '/../codigos_php/editarPerfilUsuario.php';
         </div>
     </div>
 
-    <script src="../js/editarPerfil.js">
+    <script src="../js/editarPerfil.js"></script>
 
+    <!-- JS para garantir que os novos campos entrem na animação -->
+    <script>
+        // Adiciona os novos campos à sequência de animações de entrada
+        (function() {
+            const novosDelays = [
+                { id: 'fg-papel', delay: 900, class: 'loaded' },
+                { id: 'fg-ativo', delay: 1000, class: 'loaded' }
+            ];
+
+            novosDelays.forEach(item => {
+                setTimeout(() => {
+                    const el = document.getElementById(item.id);
+                    if (el) el.classList.add(item.class);
+                }, item.delay);
+            });
+        })();
     </script>
 
 </body>

@@ -7,9 +7,6 @@ if (!ehAdministrador()) {
     exit;
 }
 
-
-exit;
-
 ?>
 
 <!DOCTYPE html>
@@ -254,7 +251,57 @@ exit;
                         </tbody>
                     </table>
                 </div>
+                <?php if (!empty($_SESSION['erro_usuario'])): ?>
+                    <div style="
+        background: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+        border-left: 4px solid #ef4444;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+        font-size: 0.88rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    ">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        <?php
+                        echo htmlspecialchars($_SESSION['erro_usuario']);
+                        unset($_SESSION['erro_usuario']);
+                        ?>
+                    </div>
+                <?php endif; ?>
 
+                <?php if (!empty($_SESSION['sucesso_usuario'])): ?>
+                    <div style="
+        background: #f0fdf4;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+        border-left: 4px solid #22c55e;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+        font-size: 0.88rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    ">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <?php
+                        echo htmlspecialchars($_SESSION['sucesso_usuario']);
+                        unset($_SESSION['sucesso_usuario']);
+                        ?>
+                    </div>
+                <?php endif; ?>
                 <!-- PAGINATION -->
                 <div class="pagination">
                     <span class="pagination-info">Mostrando 1 a 10 de 50 resultados</span>

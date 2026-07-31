@@ -44,6 +44,4 @@ if (ehAdministrador()) {
         header("Location: ../paginas/paginaInicial_usuario.php");
         exit;
     }
-
-print_r($_POST);
 }

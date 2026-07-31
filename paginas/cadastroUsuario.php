@@ -2,7 +2,6 @@
 require_once __DIR__ . '/../codigos_php/validarCadastro.php';
 require_once __DIR__ . '/../autenticar/autenticacao.php';
 
-verificarLogin();
 
 if (!ehAdministrador()) {
     header('Location: ../paginas/paginaInicial_usuario.php');

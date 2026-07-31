@@ -1,6 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . '/../codigos_php/editarChamado.php'
+require_once __DIR__ . '/../codigos_php/editarChamado.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -169,6 +170,7 @@ require_once __DIR__ . '/../codigos_php/editarChamado.php'
 
                         <input type="hidden" name="id_chamado" value="<?php echo $id_chamado ?>">
                         <!-- Título -->
+                         
                         <div class="form-group" id="fg-titulo">
                             <label for="titulo_chamado">Título do Chamado</label>
                             <div class="input-wrapper">
