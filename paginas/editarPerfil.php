@@ -128,7 +128,7 @@ require_once __DIR__ . '/../codigos_php/editarPerfilUsuario.php';
 
             <div class="nav-section">
                 <div class="nav-section-title">Usuários</div>
-                <a href="../paginas/listarUsuario.php" class="nav-item">
+                <a href="listarUsuario.php" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                         <circle cx="9" cy="7" r="4" />
@@ -322,7 +322,7 @@ require_once __DIR__ . '/../codigos_php/editarPerfilUsuario.php';
                                         <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                                     </svg>
                                 </span>
-                                <input type="password" id="senha_nova" name="senha_nova" placeholder="Deixe em branco para manter a atual" minlength="6">
+                                <input type="password" id="senha_nova" name="senha_usuario" placeholder="Deixe em branco para manter a atual" minlength="6">
                                 <button type="button" class="toggle-password" onclick="togglePassword('senha_nova', 'eyeNova')" aria-label="Mostrar senha">
                                     <svg id="eyeNova" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
@@ -390,10 +390,8 @@ require_once __DIR__ . '/../codigos_php/editarPerfilUsuario.php';
 
     <script src="../js/editarPerfil.js"></script>
 
-    <!-- JS para garantir que os novos campos entrem na animação -->
     <script>
-        // Adiciona os novos campos à sequência de animações de entrada
-        (function() {
+           (function() {
             const novosDelays = [
                 { id: 'fg-papel', delay: 900, class: 'loaded' },
                 { id: 'fg-ativo', delay: 1000, class: 'loaded' }

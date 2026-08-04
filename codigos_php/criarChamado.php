@@ -18,16 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     descricao_chamado,
     status_chamado,
     id_usuario_solicitado,
-    id_usuario_responsavel,
     inicio_chamado,
     fim_chamado
 ) VALUES (
     '$titulo_chamado',
     '$categoria_chamado',
     '$descricao_chamado',
-    'Aberto',
+    'Encaminhado',
     '$usuario',
-    NULL,
     NOW(),
     NULL
 )";

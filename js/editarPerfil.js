@@ -71,3 +71,5 @@
                 if (el) el.classList.add(item.class);
             }, item.delay);
         });
+
+      

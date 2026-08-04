@@ -25,6 +25,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $resultado = conexao($insert);
 
-    header('Locartion: ../paginas/paginaInicial_administrador.php');
+    header('Location: ../paginas/listarUsuario.php');
 }
 ?>

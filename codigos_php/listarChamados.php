@@ -24,7 +24,7 @@ try {
 
         $sql_contagem_chamados = "SELECT 
     COUNT(*) AS total_chamados,
-    SUM(CASE WHEN status_chamado = 'Em Andamento' THEN 1 ELSE 0 END) AS total_abertos,
+    SUM(CASE WHEN status_chamado = 'Encaminhado' THEN 1 ELSE 0 END) AS total_abertos,
     SUM(CASE WHEN status_chamado = 'fechado' THEN 1 ELSE 0 END) AS total_fechados
 FROM chamados";
 
@@ -53,7 +53,7 @@ FROM chamados";
 
         $sql_contagem_chamados = "SELECT 
     COUNT(*) AS total_chamados,
-    SUM(CASE WHEN status_chamado = 'Em Andamento' THEN 1 ELSE 0 END) AS total_abertos,
+    SUM(CASE WHEN status_chamado = 'Encaminhado' THEN 1 ELSE 0 END) AS total_abertos,
     SUM(CASE WHEN status_chamado = 'fechado' THEN 1 ELSE 0 END) AS total_fechados
 FROM chamados c
           WHERE $id_logado IN (

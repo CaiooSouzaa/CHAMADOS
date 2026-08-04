@@ -115,7 +115,7 @@ session_start();
                     </svg>
                     <span class="notification-dot"></span>
                 </button>
-                <a href="sair.php" style="text-decoration:none;">
+                <a href="../codigos_php/sair.php" style="text-decoration:none;">
                     <button type="button" class="topbar-btn" title="Sair">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />

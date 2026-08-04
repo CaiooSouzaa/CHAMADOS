@@ -36,12 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $papel_usuario = $_POST['papel_usuario'];
     $ativo_usuario = $_POST['ativo'];
 
-    //if(!empty())
-
     $update_usuario = "UPDATE usuario  SET nome_usuario = '$nome_usuario', email_usuario = '$email_usuario', senha_usuario = '$senha_usuario', papel_usuario = '$papel_usuario', ativo = '$ativo_usuario'";
 
     $resultado_update = conexao($update_usuario);
 
-    echo '<pre>';
-    print_r($_POST);
+    header('Location: ../paginas/editarPerfil.php');
+    exit;
 }
