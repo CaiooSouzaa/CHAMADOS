@@ -289,8 +289,9 @@ function classeStatus($status)
                             </div>
 
                             <div class="action-bar">
-                                <form action="ticket_conversa.php?id_chamado=<?php echo $chamados['id_chamados']?>" method="get">
-                                    <input type="hidden" name="id_chamado" value="<?php echo $chamados['id_chamados']?>">
+                                <form action="../codigos_php/aceitarChamado.php" method="post" id="form_aceitar_chamado">
+                                <!--<form action="ticket_conversa.php?id_chamado=<?php //echo $chamados['id_chamados']?>" method="get"> -->
+                                    <input type="hidden" name="id_chamados" value="<?php echo $chamados['id_chamados']?>">
                                     <button type="submit" class="btn btn-primary">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -357,6 +358,67 @@ function classeStatus($status)
     </div>
 
     <script src="../js/visualizarChamado.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.__aceitarChamadoIntercepted) {
+                return;
+            }
+
+            const formAceitar = document.getElementById('form_aceitar_chamado');
+            if (!formAceitar) {
+                return;
+            }
+
+            formAceitar.addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(formAceitar);
+                const fallbackId = formData.get('id_chamados');
+
+                try {
+                    const response = await fetch(formAceitar.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    });
+
+                    const textoResposta = await response.text();
+                    let resultado;
+
+                    try {
+                        resultado = JSON.parse(textoResposta);
+                    } catch (e) {
+                        console.error('Resposta do PHP não é JSON válido:', textoResposta);
+                        if (fallbackId) {
+                            window.location.assign(`ticket_conversa.php?id_chamado=${encodeURIComponent(fallbackId)}`);
+                        }
+                        return;
+                    }
+
+                    if (resultado.sucesso) {
+                        const idChamado = resultado.id_chamado || fallbackId;
+                        if (!idChamado) {
+                            alert('ID do chamado não foi retornado pelo servidor.');
+                            return;
+                        }
+                        window.location.assign(`ticket_conversa.php?id_chamado=${encodeURIComponent(idChamado)}`);
+                    } else if (fallbackId) {
+                        window.location.assign(`ticket_conversa.php?id_chamado=${encodeURIComponent(fallbackId)}`);
+                    } else {
+                        alert(resultado.mensagem || 'Não foi possível aceitar o chamado.');
+                    }
+                } catch (error) {
+                    console.error('Erro na requisição AJAX (fallback):', error);
+                    if (fallbackId) {
+                        window.location.assign(`ticket_conversa.php?id_chamado=${encodeURIComponent(fallbackId)}`);
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

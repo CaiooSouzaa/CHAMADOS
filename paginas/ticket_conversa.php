@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+$id_chamado = isset($_GET['id_chamado']) ? intval($_GET['id_chamado']) : 0;
+
 require_once __DIR__ . '/../codigos_php/listarUsuario.php';
 ?>
 <!DOCTYPE html>
@@ -1370,7 +1372,7 @@ require_once __DIR__ . '/../codigos_php/listarUsuario.php';
                     </div>
 
                     <form action="../codigos_php/enviarMensagem.php" method="post" enctype="multipart/form-data" id="replyForm">
-                        <input type="hidden" name="id_chamado" value="1042">
+                        <input type="hidden" name="id_chamado" value="<?php echo htmlspecialchars($id_chamado); ?>">
 
                         <div class="file-list" id="fileList"></div>
 
@@ -1430,7 +1432,7 @@ require_once __DIR__ . '/../codigos_php/listarUsuario.php';
 
 
             <form action="../codigos_php/transferirConversa.php" method="post" id="formTransferir">
-                <input type="hidden" name="id_chamado" value="227">
+                <input type="hidden" name="id_chamado" value="<?php echo htmlspecialchars($id_chamado); ?>">
                 <input type="hidden" name="acao" value="encaminhar">
 
                 <div class="modal-form-group">
